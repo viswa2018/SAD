@@ -1,0 +1,40 @@
+<project name="SOABuild" default="build">
+
+    <!-- Include properties from build.properties file -->
+    <property file="build.properties"/>
+<!--import file="${soa.bin.dir}/ant-sca-compile.xml" basedir="${soa.bin.dir}"/-->
+ <!-- Import compile.xml -->
+    <import file="${ant.compile.file}"/>
+	
+
+    <!-- Define targets -->
+    <target name="build">
+        <!-- Package -->
+        <!--<exec executable="cd">
+            <arg value="${soa.bin.dir}"/>
+        </exec> -->
+		    
+	<exec executable="cmd" dir="${soa.bin.dir}">
+        <arg value="/c"/>        
+    </exec>
+        <ant antfile="${ant.package.file}">
+            <property name="compositeDir" value="${compositeDir}"/>
+            <property name="compositeName" value="${compositeName}"/>
+            <property name="revision" value="${revision}"/>
+			<!-- Include common.components.home in package -->
+            <property name="common.components.home" value="${common.components.home}"/>
+			<property name="mw.home" value="${mw.home}"/>
+        </ant>
+
+        <!-- Deploy -->
+        <ant antfile="${ant.deploy.file}">
+            <property name="serverURL" value="${serverURL}"/>
+            <property name="sarLocation" value="${sarLocation}"/>
+            <property name="overwrite" value="${overwrite}"/>
+            <property name="user" value="${user}"/>
+            <property name="password" value="${password}"/>
+			<property name="oracle.soa.mgmt.home" value="${oracle.soa.mgmt.home}"/>
+        </ant>
+    </target>
+
+</project>
